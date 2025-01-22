@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
-import PokemonCard from './components/PokemonCard';
-import SearchBar from './components/SearchBar';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import PokemonList from './components/PokemonList';
+import PokemonDetail from './components/PokemonDetail';
+import Info from './components/Info';
+import Portfolio from './components/Portfolio';
 
 const App = () => {
   const [pokemon, setPokemon] = useState([]);
-  const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +26,6 @@ const App = () => {
         })
       );
       setPokemon(pokemonWithDetails);
-      setFilteredPokemon(pokemonWithDetails);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching pokemon:', error);
@@ -30,30 +33,18 @@ const App = () => {
     }
   };
 
-  const handleSearch = (searchTerm) => {
-    const filtered = pokemon.filter((p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPokemon(filtered);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Pokédex
-        </h1>
-        <SearchBar onSearch={handleSearch} />
-        {loading ? (
-          <div className="text-center mt-8">Loading...</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
-            {filteredPokemon.map((pokemon) => (
-              <PokemonCard key={pokemon.id} pokemon={pokemon} />
-            ))}
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<PokemonList pokemon={pokemon} loading={loading} />} />
+          <Route path="/pokemon/:id" element={<PokemonDetail />} />
+          <Route path="/info" element={<Info />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
   );
 };

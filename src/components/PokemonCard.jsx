@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom';
+
 const PokemonCard = ({ pokemon }) => {
-    return (
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-200">
+  return (
+    <Link to={`/pokemon/${pokemon.id}`}>
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-200 cursor-pointer">
         <div className="p-4">
           <img
             src={pokemon.sprites.front_default}
@@ -22,7 +25,8 @@ const PokemonCard = ({ pokemon }) => {
           </div>
         </div>
       </div>
-    );
-  };
-  
-  export default PokemonCard;
+    </Link>
+  );
+};
+
+export default PokemonCard;
